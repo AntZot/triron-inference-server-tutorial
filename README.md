@@ -11,7 +11,7 @@
 - Tritonserver Model Analyzer :
   1) GitHub Репозиторий Model Analyzer: [ссылка](https://github.com/triton-inference-server/model_analyzer)
   2) Пример для ансамблей: [ссылка](https://github.com/triton-inference-server/model_analyzer/blob/main/docs/ensemble_quick_start.md)
-  3) Флаги для написания файл конфигурации анализатора (advanced): [ссылка](https://github.com/triton-inference-server/model_analyzer/blob/main/docs/config.md#config-options-for-profile)
+  3) Флаги для написания файла конфигурации анализатора (advanced): [ссылка](https://github.com/triton-inference-server/model_analyzer/blob/main/docs/config.md#config-options-for-profile)
 
 
 ## 1. Установка NVIDIA Container Toolkit
@@ -105,8 +105,8 @@ dims = [-1, -1, -1, 3]
 Для начала инференса потребутеся запустить контейнер с triton inference server, запустить на нем модели и отправить запрос с клиента. 
 
 **!! NOTE !!** - все скрипты должны выполняться в корневой директории 
-Запуск будет рассмотрен на примере simple_example.
-| Примеры представленные в репозитории |
+Запуск будет рассмотрен на примере simple_example.\
+### 3.0 Примеры представленные в репозитории 
 | [Простой пример](./simple_example/README.md) | [Пример ансамбля](./ensemble_model/README.md) |
 | --------------- | ------------ |
 ### 3.1 Запуск контейнера и triton

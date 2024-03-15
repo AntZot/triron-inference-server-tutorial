@@ -1,6 +1,8 @@
 *.pt
 *.onnx
 
+/simple_example/checkpoints
+/simple_example/gen_conf
 __pycache__/
 *.py[cod]
 *$py.class
