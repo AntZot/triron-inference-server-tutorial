@@ -44,3 +44,6 @@ model-analyzer profile \
     --triton-grpc-endpoint=0.0.0.0:8001 \
     --triton-http-endpoint=0.0.0.0:8000
 ```
+
+![latency](./images/latency_breakdown.png)
+![latency](./images/throughput_v_latency.png)
