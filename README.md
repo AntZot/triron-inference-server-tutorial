@@ -104,8 +104,8 @@ dims = [-1, -1, -1, 3]
 ## 3. Инференс с помощью Triton Inference Server
 Для начала инференса потребутеся запустить контейнер с triton inference server, запустить на нем модели и отправить запрос с клиента. 
 
-**!! NOTE !!** - все скрипты должны выполняться в корневой директории 
-Запуск будет рассмотрен на примере simple_example.\
+**!! NOTE !!** - все скрипты должны выполняться в корневой директории.\
+Запуск будет рассмотрен на примере simple_example.
 ### 3.0 Примеры представленные в репозитории 
 | [Простой пример](./simple_example/README.md) | [Пример ансамбля](./ensemble_model/README.md) |
 | --------------- | ------------ |
@@ -134,7 +134,7 @@ python client.py
               'shape': [1, 84, 8400]}]}
 ```
 ## 4. Model Analyzer
-Установка sdk для анализа
+Установка sdk для анализа проведения исследований возможностей инференса 
 ```bash
 docker run -it --net=host -v ${PWD}:/workspace/ nvcr.io/nvidia/tritonserver:24.01-py3-sdk bash
 ```
@@ -150,13 +150,29 @@ perf_analyzer -m text_recognition -b 2 --shape input.1:1,32,100 --concurrency-ra
 
 
 ### Model Analyzer
-1) Run Triton inference Server container with explicit mode
+1) Запустить Trition c explicit флагом
 ```bash
 docker run --gpus=0 --shm-size=1G --rm -it -p8000:8000 -p8001:8001 -p8002:8002 -v $(pwd)/model_repository:/models nvcr.io/nvidia/tritonserver:24.01-py3
 
 tritonserver --model-repository=/models --model-control-mode=explicit
 ```
-2) Run SDK Triton Inference server container
+2) Запустить контейнер SDK контейнер
 ```bash
 docker run -it --gpus all -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/workspace --net=host nvcr.io/nvidia/tritonserver:24.01-py3-sdk
 ```
+3) Запуститить Model Analyzer для модели детекции
+```bash
+model-analyzer profile \
+    --triton-launch-mode=remote \
+    --triton-docker-shm-size=1G \
+    --output-model-repository-path=$(pwd)/gen_conf/output_dir \
+    --export-path $(pwd)/profile_results \
+    --override-output-model-repository \
+    --profile-models detection\
+    --triton-grpc-endpoint=0.0.0.0:8001 \
+    --triton-http-endpoint=0.0.0.0:8000
+```
+По результатам анализатор выводит графики с метриками ля различных конфигураций развертывания модели на сервере:
+![latency](./simple_example/images/latency_breakdown.png)
+
+![latency](./simple_example/images/throughput_v_latency.png)

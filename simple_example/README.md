@@ -28,12 +28,18 @@ python client.py
 ```
 
 ## 2. Model Analyzer
-Установка sdk для анализа
+1) Запустить Trition c explicit флагом
 ```bash
-docker run -it --net=host -v ${PWD}:/workspace/ nvcr.io/nvidia/tritonserver:24.01-py3-sdk bash
-```
+docker run --gpus=0 --shm-size=1G --rm -it -p8000:8000 -p8001:8001 -p8002:8002 -v $(pwd)/model_repository:/models nvcr.io/nvidia/tritonserver:24.01-py3
 
+tritonserver --model-repository=/models --model-control-mode=explicit
 ```
+2) Запустить контейнер SDK контейнер
+```bash
+docker run -it --gpus all -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/workspace --net=host nvcr.io/nvidia/tritonserver:24.01-py3-sdk
+```
+3) Запуститить Model Analyzer для модели детекции
+```bash
 model-analyzer profile \
     --triton-launch-mode=remote \
     --triton-docker-shm-size=1G \
@@ -44,6 +50,7 @@ model-analyzer profile \
     --triton-grpc-endpoint=0.0.0.0:8001 \
     --triton-http-endpoint=0.0.0.0:8000
 ```
-
+По результатам анализатор выводит графики с метриками ля различных конфигураций развертывания модели на сервере:
 ![latency](./images/latency_breakdown.png)
+
 ![latency](./images/throughput_v_latency.png)
