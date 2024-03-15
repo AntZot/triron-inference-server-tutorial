@@ -3,6 +3,7 @@ import cv2
 import tritonclient.http as httpclient
 import numpy as np
 from PIL import ImageDraw, Image
+from pprint import pprint 
 
 def detect_preprocessing(image):
     orig_img_size = image.shape[0:2]
@@ -58,7 +59,7 @@ def detect_postprocessing(response,orig_img_size: tuple,probability=0.5):
 
 
 def main():
-    client = httpclient.InferenceServerClient("localhost:8000")
+    client = httpclient.InferenceServerClient("0.0.0.0:8000")
 
     orig_image = cv2.imread("image.png")
     orig_image = cv2.cvtColor(orig_image, cv2.COLOR_BGR2RGB)
@@ -74,7 +75,7 @@ def main():
     #отправка и получение ответа
     response = client.infer("detection",[input_img])
 
-    print(response.get_response())
+    pprint(response.get_response())
 
     res = detect_postprocessing(response=response,orig_img_size=orig_img_size,probability=0.6)
 
